@@ -4,7 +4,7 @@ cordova-plugin-firebase-ml-kit-barcode-scanner
 
 Purpose of this Project
 -----------------------
-Enable cordova / phonegap to scan barcodes using Google Mobile Vision
+Enable cordova / phonegap to scan barcodes using Firebase ML Kit
 
 Installation
 ------------
