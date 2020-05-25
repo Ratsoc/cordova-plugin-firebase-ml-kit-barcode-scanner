@@ -82,5 +82,5 @@ function startScanning(p_OnSuccess, p_OnError, p_Settings) {
   
   exec(p_Result => {
     p_OnSuccess(p_Result[0]);
-  }, p_OnError, 'cordova-plugin-google-mobile-vision-barcode-scanner','startScan',settingArray);
+  }, p_OnError, 'cordova-plugin-firebase-ml-kit-barcode-scanner','startScan',settingArray);
 };

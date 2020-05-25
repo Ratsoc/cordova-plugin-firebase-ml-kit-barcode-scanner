@@ -37,7 +37,7 @@
     </platform>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="cordova-plugin-google-mobile-vision-barcode-scanner">
+            <feature name="cordova-plugin-firebase-ml-kit-barcode-scanner">
                 <param name="android-package" value="tl.cordova.plugin.firebase.mlkit.barcode.scanner.AndroidScanner"/>
             </feature>
         </config-file>
