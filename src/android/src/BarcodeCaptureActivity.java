@@ -201,12 +201,17 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
   // ----------------------------------------------------------------------------
   @SuppressLint("InlinedApi")
   private void createCameraSource(boolean autoFocus, boolean useFlash) {
+    int detectionType = 0;
+
+    if (DetectionTypes == 0 || DetectionTypes == 1234) {
+      detectionType = (FirebaseVisionBarcode.FORMAT_CODE_39 | FirebaseVisionBarcode.FORMAT_DATA_MATRIX);
+    } else {
+      detectionType = DetectionTypes;
+    }
+
     FirebaseVisionBarcodeDetectorOptions options =
         new FirebaseVisionBarcodeDetectorOptions.Builder()
-        .setBarcodeFormats(
-                FirebaseVisionBarcode.FORMAT_CODE_39,
-                FirebaseVisionBarcode.FORMAT_DATA_MATRIX)
-        .build();
+        .setBarcodeFormats(detectionType).build();
 
     FirebaseVisionBarcodeDetector barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options);
     BarcodeScanningProcessor scanningProcessor = new BarcodeScanningProcessor(barcodeDetector, this);

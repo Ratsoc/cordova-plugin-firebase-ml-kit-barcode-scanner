@@ -34,7 +34,7 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-  return YES;
+  return NO;
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden
@@ -65,7 +65,7 @@
   
   // Set up camera.
   self.session = [[AVCaptureSession alloc] init];
-  self.session.sessionPreset = AVCaptureSessionPresetHigh;
+  self.session.sessionPreset = AVCaptureSessionPreset1280x720;
   
   _videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue",
                           DISPATCH_QUEUE_SERIAL);

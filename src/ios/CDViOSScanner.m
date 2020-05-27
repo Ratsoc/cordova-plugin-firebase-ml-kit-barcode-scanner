@@ -51,7 +51,7 @@
       //Open scanner.
       _scannerOpen = YES;
       self.cameraViewController = [[CameraViewController alloc] init];
-      
+      self.cameraViewController.modalPresentationStyle = UIModalPresentationFullScreen;
       self.cameraViewController.delegate = self;
       
       //Provide settings to the camera view.
