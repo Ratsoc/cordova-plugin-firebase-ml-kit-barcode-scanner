@@ -34,7 +34,7 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-  return NO;
+  return YES;
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden
