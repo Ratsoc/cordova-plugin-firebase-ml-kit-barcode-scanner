@@ -65,7 +65,7 @@
   
   // Set up camera.
   self.session = [[AVCaptureSession alloc] init];
-  self.session.sessionPreset = AVCaptureSessionPreset1280x720;
+  self.session.sessionPreset = AVCaptureSessionPresetHigh;
   
   _videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue",
                           DISPATCH_QUEUE_SERIAL);
