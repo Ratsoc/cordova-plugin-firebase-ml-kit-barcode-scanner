@@ -95,7 +95,7 @@
   // Initialize barcode detector.
   FIRVisionBarcodeDetectorOptions *options =
     [[FIRVisionBarcodeDetectorOptions alloc]
-     initWithFormats: formats];
+     initWithFormats: [formats intValue]];
   FIRVision *vision = [FIRVision vision];
   self.barcodeDetector = [vision barcodeDetectorWithOptions:options];
   
