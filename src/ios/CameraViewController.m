@@ -187,10 +187,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       return;
     } else if (barcodes != nil) {
       for (FIRVisionBarcode *barcode in barcodes) {
-        NSLog(@"Barcode value: %@", barcode.rawValue);
+        NSLog(@"Barcode value: %@", barcode.displayValue);
           [self cleanupCaptureSession];
           [_session stopRunning];
-          [delegate sendResult:barcode.rawValue];
+          [delegate sendResult:barcode.displayValue];
           break;
       }
     }
