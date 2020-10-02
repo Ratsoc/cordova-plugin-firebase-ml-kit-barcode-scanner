@@ -129,7 +129,7 @@ public class BarcodeScanningProcessor {
 
   private void OnSuccess(List<FirebaseVisionBarcode> p_Barcodes) {
     for(FirebaseVisionBarcode barcode: p_Barcodes) {
-      _BarcodeUpdateListener.onBarcodeDetected(barcode.getRawValue());
+      _BarcodeUpdateListener.onBarcodeDetected(barcode.getDisplayValue());
     }
   }
 
