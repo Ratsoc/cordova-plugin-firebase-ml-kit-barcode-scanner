@@ -1,5 +1,7 @@
 // View controller demonstraing how to use the barcode detector with the AVFoundation
 // video pipeline.
+#import <Cordova/CDVScreenOrientationDelegate.h>
+
 @protocol senddataProtocol <NSObject>
 
 -(void)closeScanner;
@@ -7,8 +9,9 @@
 
 @end
 
-@interface CameraViewController : UIViewController
+@interface CameraViewController : UIViewController<CDVScreenOrientationDelegate>
 
+@property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
 @property(nonatomic,assign)id delegate;
 @property(nonatomic,assign) NSNumber *barcodeFormats;
 @property(nonatomic,assign) CGFloat scanAreaWidth;

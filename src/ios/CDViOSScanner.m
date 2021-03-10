@@ -53,7 +53,11 @@
       self.cameraViewController = [[CameraViewController alloc] init];
       self.cameraViewController.modalPresentationStyle = UIModalPresentationFullScreen;
       self.cameraViewController.delegate = self;
-      
+
+      if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
+        self.cameraViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
+      }
+
       //Provide settings to the camera view.
       NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
       f.numberStyle = NSNumberFormatterDecimalStyle;
@@ -110,7 +114,7 @@
   
   __block UINavigationController* nav = [[UINavigationController alloc]
                        initWithRootViewController:self.cameraViewController];
-  //nav.orientationDelegate = self.cameraViewController;
+
   nav.navigationBarHidden = YES;
   nav.modalPresentationStyle = self.cameraViewController.modalPresentationStyle;
   

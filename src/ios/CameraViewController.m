@@ -44,11 +44,18 @@
 
 -(BOOL) shouldAutorotate
 {
-  return NO;
+    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(shouldAutorotate)]) {
+        return [self.orientationDelegate shouldAutorotate];
+    }
+    return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskPortrait;
+    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(supportedInterfaceOrientations)]) {
+        return [self.orientationDelegate supportedInterfaceOrientations];
+    }
+
+    return 1 << UIInterfaceOrientationPortrait;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
