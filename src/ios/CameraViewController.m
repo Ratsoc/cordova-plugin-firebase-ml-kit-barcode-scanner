@@ -50,7 +50,7 @@
     return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask) supportedInterfaceOrientations {
     if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(supportedInterfaceOrientations)]) {
         return [self.orientationDelegate supportedInterfaceOrientations];
     }
@@ -237,10 +237,31 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   [self.session addOutput:self.videoDataOutput];
 }
 
+- (AVCaptureVideoOrientation)interfaceOrientationToVideoOrientation:(UIInterfaceOrientation)orientation {
+  switch (orientation) {
+    case UIInterfaceOrientationPortrait:
+        return AVCaptureVideoOrientationPortrait;
+    case UIInterfaceOrientationPortraitUpsideDown:
+        return AVCaptureVideoOrientationPortraitUpsideDown;
+    case UIInterfaceOrientationLandscapeLeft:
+        return AVCaptureVideoOrientationLandscapeLeft;
+    case UIInterfaceOrientationLandscapeRight:
+        return AVCaptureVideoOrientationLandscapeRight;
+    default:
+        break;
+  }
+  NSLog(@"Warning - Didn't recognise interface orientation (%d)",orientation);
+  return AVCaptureVideoOrientationPortrait;
+}
+
 - (void)setUpCameraPreview {
   self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
   [self.previewLayer setBackgroundColor:[UIColor blackColor].CGColor];
   [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+
+  if (self.previewLayer.connection.supportsVideoOrientation) {
+    self.previewLayer.connection.videoOrientation = [self interfaceOrientationToVideoOrientation: [UIApplication sharedApplication].statusBarOrientation];
+  }
   
   self.previewLayer.frame = self.view.superview.bounds;
   [self.view.layer addSublayer:self.previewLayer];
