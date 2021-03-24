@@ -12,10 +12,11 @@
 @interface CameraViewController : UIViewController<CDVScreenOrientationDelegate>
 
 @property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
-@property(nonatomic,assign)id delegate;
-@property(nonatomic,assign) NSNumber *barcodeFormats;
-@property(nonatomic,assign) CGFloat scanAreaWidth;
-@property(nonatomic,assign) CGFloat scanAreaHeight;
+@property (nonatomic, assign)id delegate;
+@property (nonatomic, assign) NSNumber *barcodeFormats;
+@property (nonatomic, strong) NSArray *ignoreCodes;
+@property (nonatomic, assign) CGFloat scanAreaWidth;
+@property (nonatomic, assign) CGFloat scanAreaHeight;
 
 @end
 

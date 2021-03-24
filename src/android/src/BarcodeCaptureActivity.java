@@ -42,6 +42,7 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOption
 // |  Java Imports
 // ----------------------------------------------------------------------------
 import java.io.IOException;
+import java.util.Arrays;
 
 // ----------------------------------------------------------------------------
 // |  Our Imports
@@ -58,11 +59,12 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
   public              Integer DetectionTypes                            ;
   public              double  ViewFinderWidth  = .5                     ;
   public              double  ViewFinderHeight = .7                     ;
+  public              String[] IgnoreCodes;
   public static final String  BarcodeValue     = "FirebaseVisionBarcode";
 
   // ----------------------------------------------------------------------------
   // |  Private Properties
-  // ----------------------------------------------------------------------------  
+  // ----------------------------------------------------------------------------
   private static final String TAG                   = "Barcode-reader";
   private static final int    RC_HANDLE_GMS         = 9001            ;
   private static final int    RC_HANDLE_CAMERA_PERM = 2               ;
@@ -80,6 +82,7 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
+    setRequestedOrientation(getIntent().getIntExtra("Orientation", 1));
     // Hide the status bar and action bar.
     View decorView = getWindow().getDecorView();
     int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -107,6 +110,7 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
     DetectionTypes = getIntent().getIntExtra("DetectionTypes", 1234);
     ViewFinderWidth = getIntent().getDoubleExtra("ViewFinderWidth", .5);
     ViewFinderHeight = getIntent().getDoubleExtra("ViewFinderHeight", .7);
+    IgnoreCodes = getIntent().getStringArrayExtra("IgnoreCodes");
 
     int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
     if (rc == PackageManager.PERMISSION_GRANTED) {
@@ -164,6 +168,10 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
   @Override
   public void onBarcodeDetected(String barcode) {
     // do something with barcode data returned
+    boolean contains = Arrays.asList(IgnoreCodes).contains(barcode);
+    if (contains) {
+      return;
+    }
 
     Intent data = new Intent();
     data.putExtra(BarcodeValue, barcode);

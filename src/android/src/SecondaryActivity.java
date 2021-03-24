@@ -58,6 +58,8 @@ public class SecondaryActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onCreate(Bundle p_SavedInstanceState) {
     super.onCreate(p_SavedInstanceState);
+
+    setRequestedOrientation(getIntent().getIntExtra("Orientation", 1));
     setContentView(getResources().getIdentifier("activity_barcode_scanner", "layout", getPackageName()));
 
     findViewById(getResources().getIdentifier("read_barcode", "id", getPackageName())).setOnClickListener(this);
@@ -67,6 +69,8 @@ public class SecondaryActivity extends Activity implements View.OnClickListener 
     intent.putExtra("DetectionTypes", getIntent().getIntExtra("DetectionTypes", 1234));
     intent.putExtra("ViewFinderWidth", getIntent().getDoubleExtra("DetectionTypes", .5));
     intent.putExtra("ViewFinderHeight", getIntent().getDoubleExtra("DetectionTypes", .7));
+    intent.putExtra("Orientation", getIntent().getIntExtra("Orientation", 1));
+    intent.putExtra("IgnoreCodes", getIntent().getStringArrayExtra("IgnoreCodes"));
 
     startActivityForResult(intent, RC_BARCODE_CAPTURE);
   }
