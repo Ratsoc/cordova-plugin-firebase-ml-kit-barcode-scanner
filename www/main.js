@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-firebase-ml-kit-barcode-scanner.cordova-plugin-firebase-ml-kit-barcode-scanner", function(require, exports, module) {
 // ----------------------------------------------------------------------------
 // |  Imports
 // ----------------------------------------------------------------------------
@@ -86,4 +85,3 @@ cordova.define("cordova-plugin-firebase-ml-kit-barcode-scanner.cordova-plugin-fi
       p_OnSuccess(p_Result[0]);
     }, p_OnError, 'cordova-plugin-firebase-ml-kit-barcode-scanner','startScan',settingArray);
   };
-});
