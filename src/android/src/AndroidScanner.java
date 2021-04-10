@@ -3,8 +3,10 @@ package tl.cordova.plugin.firebase.mlkit.barcode.scanner;
 // ----------------------------------------------------------------------------
 // |  Android Imports
 // ----------------------------------------------------------------------------
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -51,7 +53,7 @@ public class AndroidScanner extends CordovaPlugin {
 
   // ----------------------------------------------------------------------------
   // |  Public Functions
-  // ----------------------------------------------------------------------------  
+  // ----------------------------------------------------------------------------
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
   }
@@ -111,10 +113,19 @@ public class AndroidScanner extends CordovaPlugin {
   // |  Private Functions
   // ----------------------------------------------------------------------------
   private void openNewActivity(Context context, JSONArray args) {
+    Activity activity = cordova.getActivity();
+
     Intent intent = new Intent(context, SecondaryActivity.class);
     intent.putExtra("DetectionTypes", args.optInt(0, 1234));
     intent.putExtra("ViewFinderWidth", args.optDouble(1, .5));
     intent.putExtra("ViewFinderHeight", args.optDouble(1, .7));
+    intent.putExtra("Orientation", activity.getRequestedOrientation());
+
+    String[] ignoreCodes = new String[args.length()-3];
+    for (int i = 3; i < args.length(); i++) {
+      ignoreCodes[i] = args.optString(i);
+    }
+    intent.putExtra("IgnoreCodes", ignoreCodes);
 
     this.cordova.setActivityResultCallback(this);
     this.cordova.startActivityForResult(this, intent, RC_BARCODE_CAPTURE);

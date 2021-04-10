@@ -41,19 +41,23 @@
                 forKey:@"orientation"];
   dispatch_async(dispatch_get_main_queue(), ^{
     NSLog(@"Arguments %@", command.arguments);
-    if(_scannerOpen == YES) {
+    if (self -> _scannerOpen == YES) {
       //Scanner is currently open, throw error.
       NSArray *response = @[@"SCANNER_OPEN", @"", @""];
       CDVPluginResult *pluginResult=[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsArray:response];
-      
+
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } else {
       //Open scanner.
-      _scannerOpen = YES;
+      self -> _scannerOpen = YES;
       self.cameraViewController = [[CameraViewController alloc] init];
       self.cameraViewController.modalPresentationStyle = UIModalPresentationFullScreen;
       self.cameraViewController.delegate = self;
-      
+
+      if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
+        self.cameraViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
+      }
+
       //Provide settings to the camera view.
       NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
       f.numberStyle = NSNumberFormatterDecimalStyle;
@@ -61,11 +65,12 @@
       self.cameraViewController.scanAreaWidth = (CGFloat)[[command argumentAtIndex:1 withDefault:@.5] floatValue];
       self.cameraViewController.scanAreaHeight = (CGFloat)[[command argumentAtIndex:2 withDefault:@.7] floatValue];
       self.cameraViewController.barcodeFormats = barcodeFormats;
-      
+      self.cameraViewController.ignoreCodes = [command.arguments subarrayWithRange: NSMakeRange(3, command.arguments.count - 3)];
+
       NSLog(@"Test %@, width: %f, height: %f, barcodeFormats: %@",[command.arguments objectAtIndex:2], self.cameraViewController.scanAreaWidth, self.cameraViewController.scanAreaHeight, self.cameraViewController.barcodeFormats);
-      
+
       [self.viewController presentViewController:self.cameraViewController animated: NO completion:nil];
-      _callback = command.callbackId;
+      self -> _callback = command.callbackId;
     }
   });
   
@@ -110,7 +115,7 @@
   
   __block UINavigationController* nav = [[UINavigationController alloc]
                        initWithRootViewController:self.cameraViewController];
-  //nav.orientationDelegate = self.cameraViewController;
+
   nav.navigationBarHidden = YES;
   nav.modalPresentationStyle = self.cameraViewController.modalPresentationStyle;
   

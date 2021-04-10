@@ -44,11 +44,18 @@
 
 -(BOOL) shouldAutorotate
 {
-  return NO;
+    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(shouldAutorotate)]) {
+        return [self.orientationDelegate shouldAutorotate];
+    }
+    return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskPortrait;
+- (UIInterfaceOrientationMask) supportedInterfaceOrientations {
+    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(supportedInterfaceOrientations)]) {
+        return [self.orientationDelegate supportedInterfaceOrientations];
+    }
+
+    return 1 << UIInterfaceOrientationPortrait;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -62,23 +69,23 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
+
   // Set up camera.
   self.session = [[AVCaptureSession alloc] init];
   self.session.sessionPreset = AVCaptureSessionPresetHigh;
-  
+
   _videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue",
                           DISPATCH_QUEUE_SERIAL);
-  
+
   [self updateCameraSelection];
-  
+
   // Set up video processing pipeline.
   [self setUpVideoProcessing];
-  
+
   // Set up camera preview.
   [self setUpCameraPreview];
-  
-  
+
+
   //Parse Cordova settings.
   NSNumber *formats = 0;
   //If barcodeFormats == 0 then process as a VIN with VIN verifications.
@@ -86,24 +93,24 @@
     NSLog(@"Running VIN style");
     formats = @(FIRVisionBarcodeFormatCode39|FIRVisionBarcodeFormatDataMatrix);
   } else if([_barcodeFormats  isEqual: @1234]) {
-    
+
   } else {
     formats = _barcodeFormats;
   }
   NSLog(@"_barcodeFormats %@, %@", _barcodeFormats, formats);
-  
+
   // Initialize barcode detector.
   FIRVisionBarcodeDetectorOptions *options =
     [[FIRVisionBarcodeDetectorOptions alloc]
      initWithFormats: [formats intValue]];
   FIRVision *vision = [FIRVision vision];
   self.barcodeDetector = [vision barcodeDetectorWithOptions:options];
-  
+
 }
 
 - (void)viewDidLayoutSubviews {
   [super viewDidLayoutSubviews];
-  
+
   self.previewLayer.frame = self.view.layer.bounds;
   self.previewLayer.position = CGPointMake(CGRectGetMidX(self.previewLayer.frame),
                        CGRectGetMidY(self.previewLayer.frame));
@@ -120,9 +127,9 @@
   [[UIDevice currentDevice] setValue:
    [NSNumber numberWithInteger: UIInterfaceOrientationPortrait]
                 forKey:@"orientation"];
-  
+
   [self.session startRunning];
-  
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -171,30 +178,32 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
      fromConnection:(AVCaptureConnection *)connection {
 
   FIRVisionImageMetadata *metadata = [[FIRVisionImageMetadata alloc] init];
-  AVCaptureDevicePosition cameraPosition =
-    AVCaptureDevicePositionBack;  // Set to the capture device you used.
+  AVCaptureDevicePosition cameraPosition = AVCaptureDevicePositionBack;  // Set to the capture device you used.
   metadata.orientation =
     [self imageOrientationFromDeviceOrientation:UIDevice.currentDevice.orientation
                                  cameraPosition:cameraPosition];
-                                 
+
   FIRVisionImage *image = [[FIRVisionImage alloc] initWithBuffer:sampleBuffer];
   image.metadata = metadata;
-
-    [self.barcodeDetector detectInImage:image
+  [self.barcodeDetector detectInImage:image
                     completion:^(NSArray<FIRVisionBarcode *> *barcodes,
                                  NSError *error) {
     if (error != nil) {
       return;
     } else if (barcodes != nil) {
       for (FIRVisionBarcode *barcode in barcodes) {
+        if ([_ignoreCodes containsObject:barcode.rawValue]) {
+            continue;
+        }
+
         NSLog(@"Barcode value: %@", barcode.rawValue);
-          [self cleanupCaptureSession];
-          [_session stopRunning];
-          [delegate sendResult:barcode.rawValue];
-          break;
+        [self cleanupCaptureSession];
+        [_session stopRunning];
+        [delegate sendResult:barcode.rawValue];
+        break;
       }
     }
-  }];
+    }];
 }
 
 #pragma mark - Camera setup
@@ -219,7 +228,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                     (__bridge NSString*)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA)
                     };
   [self.videoDataOutput setVideoSettings:rgbOutputSettings];
-  
+
   if (![self.session canAddOutput:self.videoDataOutput]) {
     [self cleanupVideoProcessing];
     NSLog(@"Failed to setup video output");
@@ -230,10 +239,31 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   [self.session addOutput:self.videoDataOutput];
 }
 
+- (AVCaptureVideoOrientation)interfaceOrientationToVideoOrientation:(UIInterfaceOrientation)orientation {
+  switch (orientation) {
+    case UIInterfaceOrientationPortrait:
+        return AVCaptureVideoOrientationPortrait;
+    case UIInterfaceOrientationPortraitUpsideDown:
+        return AVCaptureVideoOrientationPortraitUpsideDown;
+    case UIInterfaceOrientationLandscapeLeft:
+        return AVCaptureVideoOrientationLandscapeLeft;
+    case UIInterfaceOrientationLandscapeRight:
+        return AVCaptureVideoOrientationLandscapeRight;
+    default:
+        break;
+  }
+  NSLog(@"Warning - Didn't recognise interface orientation (%d)",orientation);
+  return AVCaptureVideoOrientationPortrait;
+}
+
 - (void)setUpCameraPreview {
   self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
   [self.previewLayer setBackgroundColor:[UIColor blackColor].CGColor];
   [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+
+  if (self.previewLayer.connection.supportsVideoOrientation) {
+    self.previewLayer.connection.videoOrientation = [self interfaceOrientationToVideoOrientation: [UIApplication sharedApplication].statusBarOrientation];
+  }
   
   self.previewLayer.frame = self.view.superview.bounds;
   [self.view.layer addSublayer:self.previewLayer];
