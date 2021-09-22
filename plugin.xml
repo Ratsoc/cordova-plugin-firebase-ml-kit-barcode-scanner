@@ -124,7 +124,7 @@
         <framework src="com.google.firebase:firebase-ml-vision:24.0.3" />
         <framework src="com.google.firebase:firebase-ml-vision-barcode-model:16.1.1" />
             
-        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference"/>
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     </platform>
     <hook type="after_prepare" src="scripts/setupFirebaseCredentials.js" />
 </plugin>
