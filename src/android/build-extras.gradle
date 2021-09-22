@@ -32,4 +32,6 @@ ext.postBuildExtras = {
     }
 }
 
+ext.cdvCompileSdkVersion = 29
+
 apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
