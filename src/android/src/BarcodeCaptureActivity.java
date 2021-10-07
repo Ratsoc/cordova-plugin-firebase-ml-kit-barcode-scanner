@@ -93,9 +93,9 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
       getActionBar().hide();
     }
 
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().hide();
-    }
+    //if (getSupportActionBar() != null) {
+    //  getSupportActionBar().hide();
+    //}
 
     setContentView(getResources().getIdentifier("barcode_capture", "layout", getPackageName()));
 
