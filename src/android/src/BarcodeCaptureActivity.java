@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 // ----------------------------------------------------------------------------
 // |  Google Imports
