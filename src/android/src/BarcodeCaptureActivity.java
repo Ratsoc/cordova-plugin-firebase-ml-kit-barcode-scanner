@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 // ----------------------------------------------------------------------------
 // |  Google Imports
@@ -93,9 +92,9 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
       getActionBar().hide();
     }
 
-    //if (getSupportActionBar() != null) {
-    //  getSupportActionBar().hide();
-    //}
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().hide();
+    }
 
     setContentView(getResources().getIdentifier("barcode_capture", "layout", getPackageName()));
 
