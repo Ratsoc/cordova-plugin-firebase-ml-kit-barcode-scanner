@@ -740,10 +740,7 @@ public class CameraSource2 {
      * associated thread has completed, which is managed in camera source's release
      * method above.
      */
-    @SuppressLint("Assert")
-    void release() {
-      assert (_ProcessingThread.getState() == State.TERMINATED);
-    }
+    void release() {}
 
     /**
      * Marks the runnable as active/not active. Signals any blocked threads to
