@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-firebase-ml-kit-barcode-scanner",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Firebase ML Kit Barcode Scanner Plugin",
   "cordova": {
     "id": "cordova-plugin-firebase-ml-kit-barcode-scanner",
@@ -16,7 +16,7 @@
   "engines": [
     {
       "name": "cordova",
-      "version": ">=9.0.0"
+      "version": ">=10.0.0"
     }
   ],
   "author": "Tristan Lebel",
