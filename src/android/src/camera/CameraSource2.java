@@ -26,8 +26,6 @@ import androidx.annotation.StringDef;
 // ----------------------------------------------------------------------------
 import com.google.android.gms.common.images.Size;
 
-import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
-
 // ----------------------------------------------------------------------------
 // |  Java Imports
 // ----------------------------------------------------------------------------
@@ -835,13 +833,7 @@ public class CameraSource2 {
         try {
           synchronized (_CameraLock) {
             Log.d(TAG, "Process an image");
-            FirebaseVisionImageMetadata metadata = new FirebaseVisionImageMetadata.Builder()
-                    .setWidth(_PreviewSize.getWidth())
-                    .setHeight(_PreviewSize.getHeight())
-                    .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
-                    .setRotation(_Rotation)
-                    .build();
-            _ScanningProcessor.Process(data, metadata);
+            _ScanningProcessor.Process(data, _PreviewSize.getWidth(), _PreviewSize.getHeight(), _Rotation);
           }
         } catch (Throwable t) {
           Log.e(TAG, "Exception thrown from receiver.", t);

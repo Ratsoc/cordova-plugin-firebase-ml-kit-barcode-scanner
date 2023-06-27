@@ -32,11 +32,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.material.snackbar.Snackbar;
-
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.barcode.common.Barcode;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports
@@ -212,17 +211,20 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
     int detectionType = 0;
 
     if (DetectionTypes == 0 || DetectionTypes == 1234) {
-      detectionType = (FirebaseVisionBarcode.FORMAT_CODE_39 | FirebaseVisionBarcode.FORMAT_DATA_MATRIX);
+      detectionType = (Barcode.FORMAT_CODE_39 | Barcode.FORMAT_DATA_MATRIX);
     } else {
       detectionType = DetectionTypes;
     }
 
-    FirebaseVisionBarcodeDetectorOptions options =
-        new FirebaseVisionBarcodeDetectorOptions.Builder()
-        .setBarcodeFormats(detectionType).build();
+    BarcodeScannerOptions options =
+            new BarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(
+                            Barcode.FORMAT_QR_CODE,
+                            Barcode.FORMAT_AZTEC)
+                    .build();
+    BarcodeScanner scanner = BarcodeScanning.getClient(options);
 
-    FirebaseVisionBarcodeDetector barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options);
-    BarcodeScanningProcessor scanningProcessor = new BarcodeScanningProcessor(barcodeDetector, this);
+    BarcodeScanningProcessor scanningProcessor = new BarcodeScanningProcessor(scanner, this);
 
     CameraSource2.Builder builder = new CameraSource2.Builder(getApplicationContext(), scanningProcessor)
         .setFacing(CameraSource2.CAMERA_FACING_BACK)

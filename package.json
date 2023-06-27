@@ -13,12 +13,6 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "engines": [
-    {
-      "name": "cordova",
-      "version": ">=9.0.0"
-    }
-  ],
   "author": "Tristan Lebel",
   "license": "MIT",
   "main": "index.js",

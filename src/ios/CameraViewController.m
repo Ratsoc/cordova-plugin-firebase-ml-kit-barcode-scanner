@@ -5,7 +5,8 @@
 // ----------------------------------------------------------------------------
 @import AVFoundation;
 // @import Vision;
-@import FirebaseMLVision;
+@import MLKitBarcodeScanning;
+@import MLKitVision;
 
 // ----------------------------------------------------------------------------
 // |  Header File Imports
@@ -24,7 +25,7 @@
 @property(nonatomic, strong) dispatch_queue_t videoDataOutputQueue;
 @property(nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 
-@property(nonatomic, strong) FIRVisionBarcodeDetector *barcodeDetector;
+@property(nonatomic, strong) MLKBarcodeScanner *barcodeDetector;
 @property(nonatomic, strong) UIButton *torchButton;
 
 @end
@@ -91,7 +92,7 @@
   //If barcodeFormats == 0 then process as a VIN with VIN verifications.
   if([_barcodeFormats  isEqual: @0]) {
     NSLog(@"Running VIN style");
-    formats = @(FIRVisionBarcodeFormatCode39|FIRVisionBarcodeFormatDataMatrix);
+    formats = @(MLKBarcodeFormatCode39|MLKBarcodeFormatDataMatrix);
   } else if([_barcodeFormats  isEqual: @1234]) {
 
   } else {
@@ -100,12 +101,10 @@
   NSLog(@"_barcodeFormats %@, %@", _barcodeFormats, formats);
 
   // Initialize barcode detector.
-  FIRVisionBarcodeDetectorOptions *options =
-    [[FIRVisionBarcodeDetectorOptions alloc]
+    MLKBarcodeScannerOptions *options =
+    [[MLKBarcodeScannerOptions alloc]
      initWithFormats: [formats intValue]];
-  FIRVision *vision = [FIRVision vision];
-  self.barcodeDetector = [vision barcodeDetectorWithOptions:options];
-
+    self.barcodeDetector = [MLKBarcodeScanner barcodeScannerWithOptions:options];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -139,35 +138,35 @@
 
 #pragma mark - FIRVisionDetectorImageOrientation
 
-- (FIRVisionDetectorImageOrientation)imageOrientationFromDeviceOrientation:(UIDeviceOrientation)deviceOrientation
+- (UIImageOrientation)imageOrientationFromDeviceOrientation:(UIDeviceOrientation)deviceOrientation
 cameraPosition:(AVCaptureDevicePosition)cameraPosition {
   switch (deviceOrientation) {
     case UIDeviceOrientationPortrait:
       if (cameraPosition == AVCaptureDevicePositionFront) {
-        return FIRVisionDetectorImageOrientationLeftTop;
+        return UIImageOrientationLeftMirrored;
       } else {
-        return FIRVisionDetectorImageOrientationRightTop;
+        return UIImageOrientationRight;
       }
     case UIDeviceOrientationLandscapeLeft:
       if (cameraPosition == AVCaptureDevicePositionFront) {
-        return FIRVisionDetectorImageOrientationBottomLeft;
+        return UIImageOrientationDownMirrored;
       } else {
-        return FIRVisionDetectorImageOrientationTopLeft;
+        return UIImageOrientationUp;
       }
     case UIDeviceOrientationPortraitUpsideDown:
       if (cameraPosition == AVCaptureDevicePositionFront) {
-        return FIRVisionDetectorImageOrientationRightBottom;
+        return UIImageOrientationRightMirrored;
       } else {
-        return FIRVisionDetectorImageOrientationLeftBottom;
+        return UIImageOrientationLeft;
       }
     case UIDeviceOrientationLandscapeRight:
       if (cameraPosition == AVCaptureDevicePositionFront) {
-        return FIRVisionDetectorImageOrientationTopRight;
+        return UIImageOrientationUpMirrored;
       } else {
-        return FIRVisionDetectorImageOrientationBottomRight;
+        return UIImageOrientationDown;
       }
     default:
-      return FIRVisionDetectorImageOrientationTopLeft;
+      return UIImageOrientationUp;
   }
 }
 
@@ -177,21 +176,18 @@ cameraPosition:(AVCaptureDevicePosition)cameraPosition {
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
      fromConnection:(AVCaptureConnection *)connection {
 
-  FIRVisionImageMetadata *metadata = [[FIRVisionImageMetadata alloc] init];
   AVCaptureDevicePosition cameraPosition = AVCaptureDevicePositionBack;  // Set to the capture device you used.
-  metadata.orientation =
+
+  MLKVisionImage *image = [[MLKVisionImage alloc] initWithBuffer:sampleBuffer];
+  image.orientation =
     [self imageOrientationFromDeviceOrientation:UIDevice.currentDevice.orientation
                                  cameraPosition:cameraPosition];
-
-  FIRVisionImage *image = [[FIRVisionImage alloc] initWithBuffer:sampleBuffer];
-  image.metadata = metadata;
-  [self.barcodeDetector detectInImage:image
-                    completion:^(NSArray<FIRVisionBarcode *> *barcodes,
+    [self.barcodeDetector processImage:image completion:^(NSArray<MLKBarcode *> *barcodes,
                                  NSError *error) {
     if (error != nil) {
       return;
     } else if (barcodes != nil) {
-      for (FIRVisionBarcode *barcode in barcodes) {
+      for (MLKBarcode *barcode in barcodes) {
         if ([_ignoreCodes containsObject:barcode.rawValue]) {
             continue;
         }
@@ -347,7 +343,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   [self.view addSubview:self.torchButton];
   
   [self.view addSubview:verticalLine];
-  [self.view addSubview:horizontalLine];  
+  [self.view addSubview:horizontalLine];
   
   self.imageView = [[UIImageView alloc] initWithImage:nil];
   

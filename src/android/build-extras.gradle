@@ -1,10 +1,13 @@
 buildscript {
     repositories {
         jcenter()
-        google()
+        mavenCentral()
+        maven {
+          url "https://maven.google.com"
+        }
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 }
 repositories {
@@ -14,7 +17,7 @@ repositories {
     }
 }
 dependencies {
-    compile "com.google.firebase:firebase-core:16.0.8"
+    implementation "com.google.firebase:firebase-core:21.0.0"
 }
 ext.postBuildExtras = {
     android {
@@ -31,4 +34,4 @@ ext.postBuildExtras = {
     }
 }
 
-apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
+// apply plugin: com.google.gms.googleservices.GoogleServicesPlugin

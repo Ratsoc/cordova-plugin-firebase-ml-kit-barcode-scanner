@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------
 // |  Imports
 // ----------------------------------------------------------------------------
-#import <FirebaseCore/FIRApp.h>
+// #import <FirebaseCore/FIRApp.h>
 
 // ----------------------------------------------------------------------------
 // |  Header File Imports
@@ -29,7 +29,7 @@
 
 - (void)finishLaunching:(NSNotification *)notification
 {
-  [FIRApp configure];
+  //[FIRApp configure];
 }
 
 

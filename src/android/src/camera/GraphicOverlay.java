@@ -9,11 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 // ----------------------------------------------------------------------------
-// |  Google Imports
-// ----------------------------------------------------------------------------
-import com.google.android.gms.vision.CameraSource;
-
-// ----------------------------------------------------------------------------
 // |  Java Imports
 // ----------------------------------------------------------------------------
 import java.util.HashSet;
@@ -46,7 +41,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
   private       float  _WidthScaleFactor  = 1.0f                           ;
   private       int    _PreviewHeight                                      ;
   private       float  _HeightScaleFactor = 1.0f                           ;
-  private       int    _Facing            = CameraSource.CAMERA_FACING_BACK;
+  private       int    _Facing            = CameraSource2.CAMERA_FACING_BACK;
   private       Set<T> _Graphics          = new HashSet<>()                ;
 
   public GraphicOverlay(Context p_Context, AttributeSet p_AttributeSet) {
@@ -144,7 +139,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     }
 
     public float translateX(float x) {
-      if (_Overlay._Facing == CameraSource.CAMERA_FACING_FRONT) {
+      if (_Overlay._Facing == CameraSource2.CAMERA_FACING_FRONT) {
         return _Overlay.getWidth() - scaleX(x);
       } else {
         return scaleX(x);
