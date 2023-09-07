@@ -62,6 +62,37 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
 
+  //Force portrait orientation.
+  if (@available(iOS 16.0, *)) {
+    UIWindowScene *windowScene = self.view.window.windowScene;
+    UIWindowSceneGeometryPreferencesIOS *preferences = [[UIWindowSceneGeometryPreferencesIOS alloc]
+      initWithInterfaceOrientations:UIInterfaceOrientationMaskPortrait];
+    [windowScene requestGeometryUpdateWithPreferences:preferences errorHandler:^(NSError * _Nonnull error) {
+      NSLog(@"Failed to change orientation %@", error);
+    }];
+  } else {
+    [[UIDevice currentDevice] setValue:
+      [NSNumber numberWithInteger:UIInterfaceOrientationPortrait]
+                    forKey:@"orientation"];
+  }
+}
+
+- (void)viewDidLayoutSubviews {
+  [super viewDidLayoutSubviews];
+
+  self.previewLayer.frame = self.view.layer.bounds;
+  self.previewLayer.position = CGPointMake(CGRectGetMidX(self.previewLayer.frame),
+                       CGRectGetMidY(self.previewLayer.frame));
+}
+
+- (void)viewDidUnload {
+  [self cleanupCaptureSession];
+  [super viewDidUnload];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+
   // Set up camera.
   self.session = [[AVCaptureSession alloc] init];
   self.session.sessionPreset = AVCaptureSessionPresetHigh;
@@ -94,30 +125,8 @@
      initWithFormats: [formats intValue]];
 
   self.barcodeScanner = [MLKBarcodeScanner barcodeScannerWithOptions:options];
-}
-
-- (void)viewDidLayoutSubviews {
-  [super viewDidLayoutSubviews];
-
-  self.previewLayer.frame = self.view.layer.bounds;
-  self.previewLayer.position = CGPointMake(CGRectGetMidX(self.previewLayer.frame),
-                       CGRectGetMidY(self.previewLayer.frame));
-}
-
-- (void)viewDidUnload {
-  [self cleanupCaptureSession];
-  [super viewDidUnload];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-  //Force portrait orientation.
-  [[UIDevice currentDevice] setValue:
-   [NSNumber numberWithInteger: UIInterfaceOrientationPortrait]
-                forKey:@"orientation"];
 
   [self.session startRunning];
-
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

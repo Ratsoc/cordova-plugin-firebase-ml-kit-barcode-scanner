@@ -29,9 +29,19 @@
 - (void) startScan:(CDVInvokedUrlCommand *)command
 {
   //Force portrait orientation.
-  [[UIDevice currentDevice] setValue:
-   [NSNumber numberWithInteger: UIInterfaceOrientationPortrait]
-                forKey:@"orientation"];
+  if (@available(iOS 16.0, *)) {
+    UIWindowScene *windowScene = self.cameraViewController.view.window.windowScene;
+    UIWindowSceneGeometryPreferencesIOS *preferences = [[UIWindowSceneGeometryPreferencesIOS alloc]
+      initWithInterfaceOrientations:UIInterfaceOrientationMaskPortrait];
+    [windowScene requestGeometryUpdateWithPreferences:preferences errorHandler:^(NSError * _Nonnull error) {
+      NSLog(@"Failed to change orientation %@", error);
+    }];
+  } else {
+    [[UIDevice currentDevice] setValue:
+      [NSNumber numberWithInteger:UIInterfaceOrientationPortrait]
+                    forKey:@"orientation"];
+  }
+
   dispatch_async(dispatch_get_main_queue(), ^{
     NSLog(@"Arguments %@", command.arguments);
     if(_scannerOpen == YES) {
