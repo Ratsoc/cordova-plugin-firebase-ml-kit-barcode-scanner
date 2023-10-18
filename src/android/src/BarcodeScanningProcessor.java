@@ -88,7 +88,7 @@ public class BarcodeScanningProcessor {
     _ProcessingImage = _LatestImage;
     _LatestImage = null;
     if (_ProcessingImage != null) {
-      InputImage inputImage = InputImage.fromByteBuffer(this._ProcessingImage, width, height, rotation, ImageFormat.NV21);
+      InputImage inputImage = InputImage.fromByteBuffer(this._ProcessingImage, width, height, 0, ImageFormat.NV21);
       ProcessImage(inputImage);
     }
   }

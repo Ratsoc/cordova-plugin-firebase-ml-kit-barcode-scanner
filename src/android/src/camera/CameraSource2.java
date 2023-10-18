@@ -740,7 +740,6 @@ public class CameraSource2 {
      */
     @SuppressLint("Assert")
     void release() {
-      assert (_ProcessingThread.getState() == State.TERMINATED);
     }
 
     /**
