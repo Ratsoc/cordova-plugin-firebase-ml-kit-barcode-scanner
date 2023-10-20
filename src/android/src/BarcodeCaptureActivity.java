@@ -218,9 +218,7 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
 
     BarcodeScannerOptions options =
             new BarcodeScannerOptions.Builder()
-                    .setBarcodeFormats(
-                            Barcode.FORMAT_QR_CODE,
-                            Barcode.FORMAT_AZTEC)
+                    .setBarcodeFormats(detectionType)
                     .build();
     BarcodeScanner scanner = BarcodeScanning.getClient(options);
 
