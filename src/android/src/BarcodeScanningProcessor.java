@@ -9,7 +9,7 @@ import androidx.annotation.GuardedBy;
 import androidx.annotation.UiThread;
 
 // ----------------------------------------------------------------------------
-// |  ML Kit Imports
+// |  Google Imports
 // ----------------------------------------------------------------------------
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

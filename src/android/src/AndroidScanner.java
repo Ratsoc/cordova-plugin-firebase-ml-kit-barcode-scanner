@@ -3,6 +3,7 @@ package tl.cordova.plugin.firebase.mlkit.barcode.scanner;
 // ----------------------------------------------------------------------------
 // |  Android Imports
 // ----------------------------------------------------------------------------
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

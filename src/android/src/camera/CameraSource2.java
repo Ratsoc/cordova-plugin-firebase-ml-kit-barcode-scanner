@@ -25,7 +25,6 @@ import androidx.annotation.StringDef;
 // |  Google Imports
 // ----------------------------------------------------------------------------
 import com.google.android.gms.common.images.Size;
-
 import com.google.mlkit.vision.common.InputImage;
 
 // ----------------------------------------------------------------------------

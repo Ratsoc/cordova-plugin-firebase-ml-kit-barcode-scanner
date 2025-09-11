@@ -11,7 +11,7 @@ import android.view.View;
 // ----------------------------------------------------------------------------
 // |  Google Imports
 // ----------------------------------------------------------------------------
-import mlkit.vision.camera.CameraSourceConfig;
+import com.google.mlkit.vision.camera.CameraSourceConfig;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports

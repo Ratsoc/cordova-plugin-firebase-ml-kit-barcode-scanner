@@ -9,7 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 // ----------------------------------------------------------------------------
-// |  ML Kit Imports
+// |  Google Imports
 // ----------------------------------------------------------------------------
 import com.google.mlkit.vision.barcode.common.Barcode;
 
