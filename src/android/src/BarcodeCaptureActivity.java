@@ -30,10 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.snackbar.Snackbar;
-
-// ----------------------------------------------------------------------------
-// |  Google Imports
-// ----------------------------------------------------------------------------
 import com.google.mlkit.vision.barcode.common.Barcode;
 
 // ----------------------------------------------------------------------------

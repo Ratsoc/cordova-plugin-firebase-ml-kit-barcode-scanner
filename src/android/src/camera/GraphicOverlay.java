@@ -7,11 +7,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
-
-// ----------------------------------------------------------------------------
-// |  Google Imports
-// ----------------------------------------------------------------------------
-import com.google.mlkit.vision.camera.CameraSourceConfig;
+import androidx.camera.core.CameraSelector;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports
@@ -41,13 +37,13 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
   // ----------------------------------------------------------------------------
   // | Private Properties
   // ----------------------------------------------------------------------------
-  private final Object _Lock              = new Object()                         ;
-  private       int    _PreviewWidth                                             ;
-  private       float  _WidthScaleFactor  = 1.0f                                 ;
-  private       int    _PreviewHeight                                            ;
-  private       float  _HeightScaleFactor = 1.0f                                 ;
-  private       int    _Facing            = CameraSourceConfig.CAMERA_FACING_BACK;
-  private       Set<T> _Graphics          = new HashSet<>()                      ;
+  private final Object _Lock              = new Object()                   ;
+  private       int    _PreviewWidth                                       ;
+  private       float  _WidthScaleFactor  = 1.0f                           ;
+  private       int    _PreviewHeight                                      ;
+  private       float  _HeightScaleFactor = 1.0f                           ;
+  private       int    _Facing            = CameraSelector.LENS_FACING_BACK;
+  private       Set<T> _Graphics          = new HashSet<>()                ;
 
   public GraphicOverlay(Context p_Context, AttributeSet p_AttributeSet) {
     super(p_Context, p_AttributeSet);
@@ -144,7 +140,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     }
 
     public float translateX(float x) {
-      if (_Overlay._Facing == CameraSourceConfig.CAMERA_FACING_FRONT) {
+      if (_Overlay._Facing == CameraSelector.LENS_FACING_FRONT) {
         return _Overlay.getWidth() - scaleX(x);
       } else {
         return scaleX(x);
