@@ -11,7 +11,7 @@ import android.view.View;
 // ----------------------------------------------------------------------------
 // |  Google Imports
 // ----------------------------------------------------------------------------
-import com.google.android.gms.vision.CameraSource;
+import mlkit.vision.camera.CameraSourceConfig;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports
@@ -40,14 +40,14 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
   // ----------------------------------------------------------------------------
   // | Private Properties
-  // ----------------------------------------------------------------------------  
-  private final Object _Lock              = new Object()                   ;
-  private       int    _PreviewWidth                                       ;
-  private       float  _WidthScaleFactor  = 1.0f                           ;
-  private       int    _PreviewHeight                                      ;
-  private       float  _HeightScaleFactor = 1.0f                           ;
-  private       int    _Facing            = CameraSource.CAMERA_FACING_BACK;
-  private       Set<T> _Graphics          = new HashSet<>()                ;
+  // ----------------------------------------------------------------------------
+  private final Object _Lock              = new Object()                         ;
+  private       int    _PreviewWidth                                             ;
+  private       float  _WidthScaleFactor  = 1.0f                                 ;
+  private       int    _PreviewHeight                                            ;
+  private       float  _HeightScaleFactor = 1.0f                                 ;
+  private       int    _Facing            = CameraSourceConfig.CAMERA_FACING_BACK;
+  private       Set<T> _Graphics          = new HashSet<>()                      ;
 
   public GraphicOverlay(Context p_Context, AttributeSet p_AttributeSet) {
     super(p_Context, p_AttributeSet);
@@ -55,7 +55,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
   // ----------------------------------------------------------------------------
   // |  Public Functions
-  // ----------------------------------------------------------------------------    
+  // ----------------------------------------------------------------------------
   public void clear() {
     synchronized (_Lock) {
       _Graphics.clear();
@@ -121,7 +121,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
   // ----------------------------------------------------------------------------
   // |  Private Functions
-  // ----------------------------------------------------------------------------  
+  // ----------------------------------------------------------------------------
 
   // ----------------------------------------------------------------------------
   // |  Helper classes
@@ -144,7 +144,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     }
 
     public float translateX(float x) {
-      if (_Overlay._Facing == CameraSource.CAMERA_FACING_FRONT) {
+      if (_Overlay._Facing == CameraSourceConfig.CAMERA_FACING_FRONT) {
         return _Overlay.getWidth() - scaleX(x);
       } else {
         return scaleX(x);
