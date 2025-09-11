@@ -1,29 +1,45 @@
+
 package tl.cordova.plugin.firebase.mlkit.barcode.scanner;
 
+// ----------------------------------------------------------------------------
+// |  Android Imports
+// ----------------------------------------------------------------------------
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+// ----------------------------------------------------------------------------
+// |  Google Imports
+// ----------------------------------------------------------------------------
 import com.google.mlkit.vision.barcode.Barcode;
 
+// ----------------------------------------------------------------------------
+// |  Our Imports
+// ----------------------------------------------------------------------------
 import tl.cordova.plugin.firebase.mlkit.barcode.scanner.camera.GraphicOverlay;
 
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
-  private static final int COLOR_CHOICES[] = {
-    Color.BLUE, Color.CYAN, Color.GREEN
-  };
-  private static int CURRENT_COLOR_INDEX = 0;
+  // ----------------------------------------------------------------------------
+  // |  Public Properties
+  // ----------------------------------------------------------------------------
 
-  private int _Id;
-  private Paint _RectPaint;
-  private Paint _TextPaint;
-  private volatile Barcode _Barcode;
+  // ----------------------------------------------------------------------------
+  // |  Private Properties
+  // ----------------------------------------------------------------------------
+  private static final int COLOR_CHOICES[]     = { Color.BLUE, Color.CYAN, Color.GREEN };
+  private static       int CURRENT_COLOR_INDEX = 0                                      ;
 
-  public BarcodeGraphic(GraphicOverlay overlay) {
+  private          int                   _Id       ;
+  private          Paint                 _RectPaint;
+  private          Paint                 _TextPaint;
+  private volatile FirebaseVisionBarcode _Barcode  ;
+
+  BarcodeGraphic(GraphicOverlay overlay) {
     super(overlay);
+
     CURRENT_COLOR_INDEX = (CURRENT_COLOR_INDEX + 1) % COLOR_CHOICES.length;
-    int selectedColor = COLOR_CHOICES[CURRENT_COLOR_INDEX];
+    final int selectedColor = COLOR_CHOICES[CURRENT_COLOR_INDEX];
 
     _RectPaint = new Paint();
     _RectPaint.setColor(selectedColor);
@@ -35,12 +51,15 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     _TextPaint.setTextSize(36.0f);
   }
 
+  // ----------------------------------------------------------------------------
+  // |  Public Functions
+  // ----------------------------------------------------------------------------
   public int getId() {
     return _Id;
   }
 
   public void setId(int id) {
-    _Id = id;
+    this._Id = id;
   }
 
   public Barcode getBarcode() {
@@ -64,8 +83,16 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     rect.top = translateY(rect.top);
     rect.right = translateX(rect.right);
     rect.bottom = translateY(rect.bottom);
-
     canvas.drawRect(rect, _RectPaint);
+
     canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, _TextPaint);
   }
+
+  // ----------------------------------------------------------------------------
+  // |  Protected Functions
+  // ----------------------------------------------------------------------------
+
+  // ----------------------------------------------------------------------------
+  // |  Private Functions
+  // ----------------------------------------------------------------------------
 }
