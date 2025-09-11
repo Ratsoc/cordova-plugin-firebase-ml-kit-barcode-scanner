@@ -35,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 // ----------------------------------------------------------------------------
 // |  ML Kit Imports
 // ----------------------------------------------------------------------------
-import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;

@@ -12,7 +12,7 @@ import android.graphics.RectF;
 // ----------------------------------------------------------------------------
 // |  Google Imports
 // ----------------------------------------------------------------------------
-import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.common.Barcode;
 
 // ----------------------------------------------------------------------------
 // |  Our Imports
