@@ -14,7 +14,7 @@ import android.graphics.RectF;
 import com.google.mlkit.vision.barcode.common.Barcode;
 
 // ----------------------------------------------------------------------------
-– |  Our Imports
+// |  Our Imports
 // ----------------------------------------------------------------------------
 import tl.cordova.plugin.firebase.mlkit.barcode.scanner.camera.GraphicOverlay;
 
