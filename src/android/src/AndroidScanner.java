@@ -49,7 +49,7 @@ public class AndroidScanner extends CordovaPlugin {
 
   // ----------------------------------------------------------------------------
   // |  Public Functions
-  // ----------------------------------------------------------------------------  
+  // ----------------------------------------------------------------------------
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
   }
@@ -59,8 +59,9 @@ public class AndroidScanner extends CordovaPlugin {
     Context context = cordova.getActivity().getApplicationContext();
     CallbackContext = p_CallbackContext;
 
-    if ("startScan".equals(p_Action)) {
-      new Thread(new OneShotTask(context, p_Args)).start();
+    if (p_Action.equals("startScan")) {
+      Thread thread = new Thread(new OneShotTask(context, p_Args));
+      thread.start();
       return true;
     }
 

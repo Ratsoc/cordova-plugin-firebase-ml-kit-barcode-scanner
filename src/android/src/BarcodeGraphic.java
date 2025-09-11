@@ -1,4 +1,3 @@
-
 package tl.cordova.plugin.firebase.mlkit.barcode.scanner;
 
 // ----------------------------------------------------------------------------
@@ -10,12 +9,12 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 // ----------------------------------------------------------------------------
-// |  Google Imports
+// |  ML Kit Imports
 // ----------------------------------------------------------------------------
 import com.google.mlkit.vision.barcode.common.Barcode;
 
 // ----------------------------------------------------------------------------
-// |  Our Imports
+– |  Our Imports
 // ----------------------------------------------------------------------------
 import tl.cordova.plugin.firebase.mlkit.barcode.scanner.camera.GraphicOverlay;
 
@@ -30,10 +29,10 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
   private static final int COLOR_CHOICES[]     = { Color.BLUE, Color.CYAN, Color.GREEN };
   private static       int CURRENT_COLOR_INDEX = 0                                      ;
 
-  private          int                   _Id       ;
-  private          Paint                 _RectPaint;
-  private          Paint                 _TextPaint;
-  private volatile FirebaseVisionBarcode _Barcode  ;
+  private          int     _Id       ;
+  private          Paint   _RectPaint;
+  private          Paint   _TextPaint;
+  private volatile Barcode _Barcode  ;
 
   BarcodeGraphic(GraphicOverlay overlay) {
     super(overlay);
