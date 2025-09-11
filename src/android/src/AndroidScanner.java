@@ -3,6 +3,7 @@ package tl.cordova.plugin.firebase.mlkit.barcode.scanner;
 // ----------------------------------------------------------------------------
 // |  Android Imports
 // ----------------------------------------------------------------------------
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,34 +12,23 @@ import android.util.Log;
 // ----------------------------------------------------------------------------
 // |  Cordova Imports
 // ----------------------------------------------------------------------------
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
 // ----------------------------------------------------------------------------
-// |  Google Imports
+// |  JSON Imports
 // ----------------------------------------------------------------------------
 import org.json.JSONArray;
 import org.json.JSONException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-
-// ----------------------------------------------------------------------------
-// |  Java Imports
-// ----------------------------------------------------------------------------
-import javax.security.auth.callback.Callback;
 
 // ----------------------------------------------------------------------------
 // |  Our Imports
 // ----------------------------------------------------------------------------
 
 public class AndroidScanner extends CordovaPlugin {
-  // ----------------------------------------------------------------------------
-  // | Public Properties
-  // ----------------------------------------------------------------------------
-
   // ----------------------------------------------------------------------------
   // | Protected Properties
   // ----------------------------------------------------------------------------
@@ -50,23 +40,23 @@ public class AndroidScanner extends CordovaPlugin {
   private static final int RC_BARCODE_CAPTURE = 9001;
 
   // ----------------------------------------------------------------------------
-  // |  Public Functions
-  // ----------------------------------------------------------------------------  
+  // | Public Functions
+  // ----------------------------------------------------------------------------
+  @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
   }
 
   @Override
-  public boolean execute(String p_Action, JSONArray p_Args, CallbackContext p_CallbackContext) throws JSONException {
+  public boolean execute(String p_Action, JSONArray p_Args, CallbackContext p_CallbackContext)
+      throws JSONException {
     Context context = cordova.getActivity().getApplicationContext();
     CallbackContext = p_CallbackContext;
 
-    if (p_Action.equals("startScan")) {
-      Thread thread = new Thread(new OneShotTask(context, p_Args));
-      thread.start();
+    if ("startScan".equals(p_Action)) {
+      new Thread(new OneShotTask(context, p_Args)).start();
       return true;
     }
-
     return false;
   }
 
@@ -75,40 +65,39 @@ public class AndroidScanner extends CordovaPlugin {
     super.onActivityResult(p_RequestCode, p_ResultCode, p_Data);
 
     if (p_RequestCode == RC_BARCODE_CAPTURE) {
-      if (p_ResultCode == CommonStatusCodes.SUCCESS) {
-        Intent d = new Intent();
+      if (p_ResultCode == Activity.RESULT_OK) {
         if (p_Data != null) {
           String barcode = p_Data.getStringExtra(BarcodeCaptureActivity.BarcodeValue);
           JSONArray result = new JSONArray();
           result.put(barcode);
           result.put("");
           result.put("");
-          CallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
-
+          CallbackContext.sendPluginResult(
+              new PluginResult(PluginResult.Status.OK, result));
           Log.d("AndroidScanner", "Barcode read: " + barcode);
         }
       } else {
-        String err = p_Data.getParcelableExtra("err");
+        String err = (p_Data != null)
+            ? p_Data.getStringExtra("err")
+            : "UNKNOWN_ERROR";
         JSONArray result = new JSONArray();
         result.put(err);
         result.put("");
         result.put("");
-        CallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, result));
+        CallbackContext.sendPluginResult(
+            new PluginResult(PluginResult.Status.ERROR, result));
       }
     }
   }
 
   @Override
-  public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+  public void onRestoreStateForActivityResult(
+      Bundle state, CallbackContext callbackContext) {
     CallbackContext = callbackContext;
   }
 
   // ----------------------------------------------------------------------------
-  // |  Protected Functions
-  // ----------------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------------
-  // |  Private Functions
+  // | Private Functions
   // ----------------------------------------------------------------------------
   private void openNewActivity(Context context, JSONArray args) {
     Intent intent = new Intent(context, SecondaryActivity.class);
@@ -121,17 +110,18 @@ public class AndroidScanner extends CordovaPlugin {
   }
 
   // ----------------------------------------------------------------------------
-  // |  Helper classes
+  // | Helper classes
   // ----------------------------------------------------------------------------
   private class OneShotTask implements Runnable {
-    private Context   _Context;
-    private JSONArray _Args   ;
+    private final Context _Context;
+    private final JSONArray _Args;
 
-    private OneShotTask(Context p_Context, JSONArray p_TaskArgs) {
+    OneShotTask(Context p_Context, JSONArray p_TaskArgs) {
       _Context = p_Context;
       _Args = p_TaskArgs;
     }
 
+    @Override
     public void run() {
       openNewActivity(_Context, _Args);
     }

@@ -26,7 +26,7 @@ import androidx.annotation.StringDef;
 // ----------------------------------------------------------------------------
 import com.google.android.gms.common.images.Size;
 
-import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
+import com.google.mlkit.vision.common.InputImage;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports
@@ -178,7 +178,7 @@ public class CameraSource2 {
       _CameraSource._Facing = facing;
       return this;
     }
-    
+
     public CameraSource2 build() {
       _CameraSource._FrameProcessor = _CameraSource.new FrameProcessingRunnable();
       return _CameraSource;
@@ -187,13 +187,13 @@ public class CameraSource2 {
 
   // ----------------------------------------------------------------------------
   // | Constructor
-  // ---------------------------------------------------------------------------- 
+  // ----------------------------------------------------------------------------
   private CameraSource2() { // Constructor is private to force creation using the builder class.
   }
 
   // ----------------------------------------------------------------------------
   // | Public Functions
-  // ---------------------------------------------------------------------------- 
+  // ----------------------------------------------------------------------------
   public void release() {
     synchronized (_CameraLock) {
       stop();
@@ -426,7 +426,7 @@ public class CameraSource2 {
 
   // ----------------------------------------------------------------------------
   // | Private Functions
-  // ----------------------------------------------------------------------------   
+  // ----------------------------------------------------------------------------
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
   private class CameraAutoFocusMoveCallback implements Camera.AutoFocusMoveCallback {
     private AutoFocusMoveCallback _Delegate;
@@ -557,7 +557,7 @@ public class CameraSource2 {
         }
       }
     }
-    
+
     if (validPreviewSizes.size() == 0) {
       Log.w(TAG, "No preview sizes have a corresponding same-aspect-ratio picture size");
       for (android.hardware.Camera.Size previewSize : supportedPreviewSizes) {
@@ -703,7 +703,7 @@ public class CameraSource2 {
     public Size pictureSize() {
       return _Picture;
     }
-  }  
+  }
 
   private class CameraPreviewCallback implements Camera.PreviewCallback {
     @Override
@@ -832,13 +832,13 @@ public class CameraSource2 {
         try {
           synchronized (_CameraLock) {
             Log.d(TAG, "Process an image");
-            FirebaseVisionImageMetadata metadata = new FirebaseVisionImageMetadata.Builder()
-                    .setWidth(_PreviewSize.getWidth())
-                    .setHeight(_PreviewSize.getHeight())
-                    .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
-                    .setRotation(_Rotation)
-                    .build();
-            _ScanningProcessor.Process(data, metadata);
+            _ScanningProcessor.process(
+              data,
+              _PreviewSize.getWidth(),
+              _PreviewSize.getHeight(),
+              _Rotation * 90,
+              InputImage.IMAGE_FORMAT_NV21
+            );
           }
         } catch (Throwable t) {
           Log.e(TAG, "Exception thrown from receiver.", t);

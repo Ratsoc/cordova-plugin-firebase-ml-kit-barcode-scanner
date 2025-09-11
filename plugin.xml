@@ -49,7 +49,7 @@
                     android:name="com.google.android.gms.version"
                     android:value="@integer/google_play_services_version" />
             <meta-data
-                    android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                    android:name="com.google.mlkit.vision.DEPENDENCIES"
                     android:value="barcode" />
 
             <activity android:screenOrientation="portrait" android:label="@string/title_activity_main" android:name="tl.cordova.plugin.firebase.mlkit.barcode.scanner.SecondaryActivity"/>
@@ -64,7 +64,7 @@
                     android:name="com.google.android.gms.version"
                     android:value="@integer/google_play_services_version" />
             <meta-data
-                    android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                    android:name="com.google.mlkit.vision.DEPENDENCIES"
                     android:value="barcode" />
 
             <activity android:screenOrientation="portrait" android:label="@string/title_activity_main" android:name="tl.cordova.plugin.firebase.mlkit.barcode.scanner.SecondaryActivity"/>
@@ -120,9 +120,7 @@
 
         <framework src="androidx.appcompat:appcompat:1.1.0" />
         <framework src="com.google.android.material:material:1.0.0" />
-        <framework src="com.google.firebase:firebase-ml-vision:24.0.3" />
-        <!-- <framework src="com.google.firebase:firebase-ml-vision-barcode-model:16.1.1" /> -->
-        <framework src="com.google.mlkit:barcode-scanning:17.0.2" />
+        <framework src="com.google.mlkit:barcode-scanning:17.3.0" />
 
         <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference"/>
     </platform>
