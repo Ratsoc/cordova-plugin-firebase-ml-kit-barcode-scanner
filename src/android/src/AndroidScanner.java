@@ -87,7 +87,7 @@ public class AndroidScanner extends CordovaPlugin {
           Log.d("AndroidScanner", "Barcode read: " + barcode);
         }
       } else {
-        String err = p_Data.getParcelableExtra("err");
+        String err = p_Data != null ? p_Data.getParcelableExtra("err") : "No scan data received";
         JSONArray result = new JSONArray();
         result.put(err);
         result.put("");
