@@ -105,7 +105,7 @@ public class BarcodeScanningProcessor {
   public void Stop() {
     try {
       _Detector.close();
-    } catch(IOException e) {
+    } catch (Exception e) {
       Log.e(TAG, "Error on BarcodeScanner close.", e);
     }
   }
