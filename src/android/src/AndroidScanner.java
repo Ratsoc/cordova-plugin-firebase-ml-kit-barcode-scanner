@@ -95,6 +95,7 @@ public class AndroidScanner extends CordovaPlugin {
         CallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, result));
       }
     }
+    finish();
   }
 
   @Override
