@@ -203,8 +203,12 @@ public final class BarcodeCaptureActivity extends    AppCompatActivity
       detectionType = DetectionTypes;
     }
 
-    // Processor creates/owns the ML Kit scanner internally now.
-    BarcodeScanningProcessor scanningProcessor = new BarcodeScanningProcessor(this);
+    BarcodeScannerOptions options =
+        new BarcodeScannerOptions.Builder()
+        .setBarcodeFormats(detectionType).build();
+
+    BarcodeScanner scanner = BarcodeScanning.getClient(options);
+    BarcodeScanningProcessor scanningProcessor = new BarcodeScanningProcessor(scanner, this);
 
     CameraSource2.Builder builder = new CameraSource2.Builder(getApplicationContext(), scanningProcessor)
         .setFacing(CameraSource2.CAMERA_FACING_BACK)

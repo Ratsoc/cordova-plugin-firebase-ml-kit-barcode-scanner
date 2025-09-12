@@ -34,12 +34,8 @@ public class BarcodeScanningProcessor {
   // ----------------------------------------------------------------------------
   // | Public Properties
   // ----------------------------------------------------------------------------
-  public BarcodeScanningProcessor(Context p_Context) {
-    BarcodeScannerOptions options =
-        new BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .build();
-    _Detector = BarcodeScanning.getClient(options);
+  public BarcodeScanningProcessor(BarcodeScanner p_Scanner, Context p_Context) {
+    _Detector = p_Scanner;
     if (p_Context instanceof BarcodeUpdateListener) {
       this._BarcodeUpdateListener = (BarcodeUpdateListener) p_Context;
     } else {

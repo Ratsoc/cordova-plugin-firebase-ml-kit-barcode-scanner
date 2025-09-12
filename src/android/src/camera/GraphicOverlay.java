@@ -23,6 +23,7 @@ import java.util.Vector;
 // ----------------------------------------------------------------------------
 // |  Our Imports
 // ----------------------------------------------------------------------------
+import tl.cordova.plugin.firebase.mlkit.barcode.scanner.camera.CameraSource2;
 
 public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
   // ----------------------------------------------------------------------------
@@ -36,12 +37,12 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
   // ----------------------------------------------------------------------------
   // | Private Properties
   // ----------------------------------------------------------------------------
-  private final Object _Lock              = new Object()   ;
-  private       int    _PreviewWidth                       ;
-  private       float  _WidthScaleFactor  = 1.0f           ;
-  private       int    _PreviewHeight                      ;
-  private       float  _HeightScaleFactor = 1.0f           ;
-  private       int    _Facing            = 0              ; // CAMERA_FACING_BACK
+  private final Object _Lock              = new Object()                    ;
+  private       int    _PreviewWidth                                        ;
+  private       float  _WidthScaleFactor  = 1.0f                            ;
+  private       int    _PreviewHeight                                       ;
+  private       float  _HeightScaleFactor = 1.0f                            ;
+  private       int    _Facing            = CameraSource2.CAMERA_FACING_BACK;
   private       Set<T> _Graphics          = new HashSet<>();
 
   public GraphicOverlay(Context p_Context, AttributeSet p_AttributeSet) {
@@ -139,7 +140,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     }
 
     public float translateX(float x) {
-      if (_Overlay._Facing == 1) { // CAMERA_FACING_FRONT
+      if (_Overlay._Facing == CameraSource2.CAMERA_FACING_FRONT) {
         return _Overlay.getWidth() - scaleX(x);
       } else {
         return scaleX(x);
