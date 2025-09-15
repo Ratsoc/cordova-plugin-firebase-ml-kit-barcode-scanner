@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import com.google.android.gms.common.api.CommonStatusCodes;
 
 public class SecondaryActivity extends Activity implements View.OnClickListener {
   // ----------------------------------------------------------------------------

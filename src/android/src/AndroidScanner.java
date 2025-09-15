@@ -28,6 +28,7 @@ import org.apache.cordova.PluginResult;
 // ----------------------------------------------------------------------------
 import org.json.JSONArray;
 import org.json.JSONException;
+import com.google.android.gms.common.api.CommonStatusCodes;
 
 // ----------------------------------------------------------------------------
 // |  Java Imports
