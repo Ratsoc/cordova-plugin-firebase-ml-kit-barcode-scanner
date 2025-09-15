@@ -9,6 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.os.Parcelable;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+
 // ----------------------------------------------------------------------------
 // |  Cordova Imports
 // ----------------------------------------------------------------------------
@@ -47,6 +52,7 @@ public class AndroidScanner extends CordovaPlugin {
   // | Private Properties
   // ----------------------------------------------------------------------------
   private static final int RC_BARCODE_CAPTURE = 9001;
+  private Thread _ScanThread;
 
   // ----------------------------------------------------------------------------
   // |  Public Functions
@@ -63,6 +69,8 @@ public class AndroidScanner extends CordovaPlugin {
     if (p_Action.equals("startScan")) {
       Thread thread = new Thread(new OneShotTask(context, p_Args));
       thread.start();
+
+      _ScanThread = thread;
       return true;
     }
 
@@ -95,7 +103,11 @@ public class AndroidScanner extends CordovaPlugin {
         CallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, result));
       }
     }
-    finish();
+
+    if (_ScanThread != null) {
+      _ScanThread.interrupt();
+      _ScanThread = null;
+    }
   }
 
   @Override
