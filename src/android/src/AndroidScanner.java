@@ -82,7 +82,7 @@ public class AndroidScanner extends CordovaPlugin {
     super.onActivityResult(p_RequestCode, p_ResultCode, p_Data);
 
     if (p_RequestCode == RC_BARCODE_CAPTURE) {
-      if (p_ResultCode == Activity.RESULT_OK) {
+      if (p_ResultCode == CommonStatusCodes.SUCCESS) {
         Intent d = new Intent();
         if (p_Data != null) {
           String barcode = p_Data.getStringExtra(BarcodeCaptureActivity.BarcodeValue);

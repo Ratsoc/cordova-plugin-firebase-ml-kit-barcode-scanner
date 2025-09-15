@@ -70,18 +70,18 @@ public class SecondaryActivity extends Activity implements View.OnClickListener 
     Log.d(TAG, "Activity exited");
     if (p_RequestCode == RC_BARCODE_CAPTURE) {
       Intent d = new Intent();
-      if (p_ResultCode == Activity.RESULT_OK) {
+      if (p_ResultCode == CommonStatusCodes.SUCCESS) {
         if (p_Data != null) {
           String barcode = p_Data.getStringExtra(BarcodeCaptureActivity.BarcodeValue);
           d.putExtra(BarcodeValue, barcode);
-          setResult(Activity.RESULT_OK, p_Data);
+          setResult(CommonStatusCodes.SUCCESS, p_Data);
         } else {
           d.putExtra("err", "USER_CANCELLED");
-          setResult(Activity.RESULT_CANCELED, d);
+          setResult(CommonStatusCodes.ERROR, d);
         }
       } else {
         d.putExtra("err", "There was an error with the barcode reader.");
-        setResult(Activity.RESULT_CANCELED, d);
+        setResult(CommonStatusCodes.ERROR, d);
       }
       finish();
     } else {
