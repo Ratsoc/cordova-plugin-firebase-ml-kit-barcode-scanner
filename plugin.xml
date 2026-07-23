@@ -71,7 +71,7 @@
             <activity android:screenOrientation="portrait" android:label="Read Barcode" android:name="tl.cordova.plugin.firebase.mlkit.barcode.scanner.BarcodeCaptureActivity" android:theme="@style/Theme.AppCompat.Light"/>
         </config-file>
 
-        <config-file target="res/values/strings.xml" parent="/*">
+        <config-file target="res/values/cdv_strings.xml" parent="/*">
             <string name="ok">OK</string>
             <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
             <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
